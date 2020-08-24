@@ -19,13 +19,35 @@ $(document).ready(function () {
                     $('#show').html(weatherAnswers);
                     $('#city').val('');
 
+                    function uvIndex(lat, lon) {
+                        $.ajax({
+                            type: "GET",
+                            url: "https://api.openweathermap.org/data/2.5/uvi?appid=7b8ff497009dcd9d7687041d628b4ed1=" + lat + "&lon=" + lon,
+                            dataType: "json",
+                            success: function (data) {
+
+
+                                var lonLat = show(data);
+
+                                $('#showUv').html(lonLat);
+
+
+
+
+
+
+                            }
+                        });
+                    }
+
+
+
+
+
 
 
                 }
             });
-
-
-
 
         } else {
             $('#invalid').html('Invalid city');
@@ -37,6 +59,7 @@ $(document).ready(function () {
 
 });
 function show(data) {
+
     return "<h2><em>Current Weather</em>: " + data.name + ", " + data.date + "</h2>" +
         "<h3><strong>Temperature:</strong>: " + data.main.temp + "</h3>" +
         "<h3><strong>Humidity:</strong>: " + data.main.humidity + "%</h3>" +
@@ -44,16 +67,7 @@ function show(data) {
 
 
 
-}
-function uvIndex(lat, lon) {
-    $.ajax({
-        type: "GET",
-        url: "https://api.openweathermap.org/data/2.5/uvi?appid=7b8ff497009dcd9d7687041d628b4ed=" + lat + "&lon=" + lon,
-        dataType: "json",
-        success: function (data) {
 
-        }
-    });
 
 }
 
