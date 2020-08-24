@@ -1,50 +1,26 @@
 
 $(document).ready(function () {
-    $('#submitCity').click(function (event) {
+    function weatherApi(event) {
         event.preventDefault();
 
         var city = $('#city').val();
+        weatherForecast(city);
         if (city != '') {
 
             $.ajax({
 
-                url: 'https://api.openweathermap.org/data/2.5/weather?q=' + city + "&appid=7b8ff497009dcd9d7687041d628b4ed1",
+                url: "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=7b8ff497009dcd9d7687041d628b4ed1&units=imperial",
                 type: "GET",
                 dataType: "json",
                 success: function (data) {
-
+                    // console.log(data);
                     var weatherAnswers = show(data);
 
 
                     $('#show').html(weatherAnswers);
                     $('#city').val('');
 
-                    function uvIndex(lat, lon) {
-                        $.ajax({
-                            type: "GET",
-                            url: "https://api.openweathermap.org/data/2.5/uvi?appid=7b8ff497009dcd9d7687041d628b4ed1=" + lat + "&lon=" + lon,
-                            dataType: "json",
-                            success: function (data) {
-
-
-                                var lonLat = show(data);
-
-                                $('#showUv').html(lonLat);
-
-
-
-
-
-
-                            }
-                        });
-                    }
-
-
-
-
-
-
+                    uvIndex(data.coord.lat, data.coord.lon);
 
                 }
             });
@@ -52,8 +28,29 @@ $(document).ready(function () {
         } else {
             $('#invalid').html('Invalid city');
         }
-    });
+    };
 
+    function weatherForecast(city) {
+        console.log(city);
+    }
+
+
+    function uvIndex(lat, lon) {
+        $.ajax({
+            type: "GET",
+            url: "https://api.openweathermap.org/data/2.5/uvi?appid=7b8ff497009dcd9d7687041d628b4ed1&lat=" + lat + "&lon=" + lon,
+            dataType: "json",
+            success: function (data) {
+
+
+            }
+        });
+    }
+
+    console.log(uvIndex);
+
+
+    $('#submitCity').click(weatherApi)
 
 
 
@@ -68,6 +65,7 @@ function show(data) {
 
 
 
+}
+function uvIndex(lat, lon) {
 
 }
-
