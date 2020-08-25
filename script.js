@@ -1,10 +1,13 @@
 
 $(document).ready(function () {
+
+
     function weatherApi(event) {
         event.preventDefault();
 
         var city = $('#city').val();
         weatherForecast(city);
+
         if (city != '') {
 
             $.ajax({
@@ -13,7 +16,7 @@ $(document).ready(function () {
                 type: "GET",
                 dataType: "json",
                 success: function (data) {
-                    // console.log(data);
+                    console.log(data);
                     var weatherAnswers = show(data);
 
 
@@ -31,23 +34,56 @@ $(document).ready(function () {
     };
 
     function weatherForecast(city) {
+        $.ajax({
+            type: "GET",
+            url: "api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=7b8ff497009dcd9d7687041d628b4ed1",
+            dataType: 'json',
+            success: function (forData) {
+                console.log(forData);
+                var forecast = forData
+                $('#forecast').html(forecast)
+                console.log(forData);
+            }
+
+
+        })
         console.log(city);
     }
 
 
     function uvIndex(lat, lon) {
+        console.log("lat and lon")
+        console.log(lat, lon)
         $.ajax({
             type: "GET",
             url: "https://api.openweathermap.org/data/2.5/uvi?appid=7b8ff497009dcd9d7687041d628b4ed1&lat=" + lat + "&lon=" + lon,
             dataType: "json",
-            success: function (data) {
+            success: function (UVdata) {
+                var uv = UVdata
+                //console.log("UV Data")
+                // console.log(UVdata)
+                //determine the uv value
+                //determine the level
+                //update the uv data in the html
+                $('#showUv').html(uv)
+                console.log(UVdata.value);
+                if (UVdata.value < 3) {
+                    return $('#showUv').html('UV Index' + UVdata.value);
+                }
+                else if (UVdata.value < 7) {
+                    return $('#showUv').html('UV Index' + UVdata.value);
+                }
+                else {
+                    return $('#showUv').css({ color: 'red', background: 'blue' }).html('UV Index' + UVdata.value);
+                }
+
 
 
             }
         });
     }
 
-    console.log(uvIndex);
+
 
 
     $('#submitCity').click(weatherApi)
@@ -55,6 +91,7 @@ $(document).ready(function () {
 
 
 });
+
 function show(data) {
 
     return "<h2><em>Current Weather</em>: " + data.name + ", " + data.date + "</h2>" +
@@ -66,6 +103,5 @@ function show(data) {
 
 
 }
-function uvIndex(lat, lon) {
 
-}
+
