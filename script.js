@@ -33,22 +33,7 @@ $(document).ready(function () {
         }
     };
 
-    function weatherForecast(city) {
-        $.ajax({
-            type: "GET",
-            url: "api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=7b8ff497009dcd9d7687041d628b4ed1",
-            dataType: 'json',
-            success: function (forData) {
-                console.log(forData);
-                var forecast = forData
-                $('#forecast').html(forecast)
-                console.log(forData);
-            }
 
-
-        })
-        console.log(city);
-    }
 
 
     function uvIndex(lat, lon) {
@@ -68,10 +53,10 @@ $(document).ready(function () {
                 $('#showUv').html(uv)
                 console.log(UVdata.value);
                 if (UVdata.value < 3) {
-                    return $('#showUv').html('UV Index' + UVdata.value);
+                    return $('#showUv').css({ color: 'green', background: 'blue' }).html('UV Index' + UVdata.value);
                 }
                 else if (UVdata.value < 7) {
-                    return $('#showUv').html('UV Index' + UVdata.value);
+                    return $('#showUv').css({ color: 'yellow', background: 'blue' }).html('UV Index' + UVdata.value);
                 }
                 else {
                     return $('#showUv').css({ color: 'red', background: 'blue' }).html('UV Index' + UVdata.value);
@@ -81,6 +66,40 @@ $(document).ready(function () {
 
             }
         });
+    }
+    function weatherForecast(city) {
+        $.ajax({
+            type: "GET",
+            url: "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=7b8ff497009dcd9d7687041d628b4ed1&units=imperial",
+            dataType: 'json',
+            success: function (forData) {
+                console.log(forData);
+                var forecastHum = forData;
+                var forecast = forData;
+                var forecastDay = forData;
+                $('#forecast').html(forecast);
+                $('#forecastHum').html(forecastHum);
+                $('#forecastDay').html(forecastDay);
+                //console.log(forData);
+                return "<h3><strong>5 Day Forecast:</strong></h3>" +
+                    $('#forecastDay').html('Date:' + forData.list[1].dt_txt) +
+                    $('#forecast').html('Temp:' + forData.list[1].main.temp) +
+                    $('#forecastHum').html('Humidity:' + forData.list[1].main.humidity);
+
+
+
+
+
+
+
+
+
+
+            }
+
+
+        })
+        // console.log(city);
     }
 
 
@@ -103,5 +122,10 @@ function show(data) {
 
 
 }
+
+
+
+
+
 
 
