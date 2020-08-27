@@ -73,18 +73,32 @@ $(document).ready(function () {
             url: "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=7b8ff497009dcd9d7687041d628b4ed1&units=imperial",
             dataType: 'json',
             success: function (forData) {
-                console.log(forData);
-                var forecastHum = forData;
-                var forecast = forData;
-                var forecastDay = forData;
-                $('#forecast').html(forecast);
-                $('#forecastHum').html(forecastHum);
-                $('#forecastDay').html(forecastDay);
-                //console.log(forData);
-                return "<h3><strong>5 Day Forecast:</strong></h3>" +
-                    $('#forecastDay').html('Date:' + forData.list[1].dt_txt) +
-                    $('#forecast').html('Temp:' + forData.list[1].main.temp) +
-                    $('#forecastHum').html('Humidity:' + forData.list[1].main.humidity);
+                console.log('fordata1', forData);
+
+
+                console.log('fordata2', forData);
+                $('#forecastweek').html("<h3><strong>5 Day Forecast:</strong></h3>").append('div class="row"');
+                // $('#forecastDay').html('Date:' + forData.list[1].dt_txt) +
+                // $('#forecast').html('Temp:' + forData.list[1].main.temp) +
+                // $('#forecastHum').html('Humidity:' + forData.list[1].main.humidity);
+
+                for (const i = 0; i < forData.list.length; i++) {
+                    if (forData.list[i].dt_txt.indexOf('15:00:00') !== -1) {
+
+                        var col = $("<div>").addClass("col-2");
+                        var card = $("<div>").addClass("card bg-primary text-white");
+                        var body = $("<div>").addClass("card-body p-2");
+                        var title = $("<h3>").addClass("card-title").text(new Date(fordata.list[i].dt_txt).toLocalDateString());
+                        var p1 = $("<p>").addClass("card-text").text("Temperature: " + fordata.list[i].main.temp_max + " F");
+                        var p2 = $("<p>").addClass("card-text").text("Humidity: " + fordata.list[i].main.humidity + "%");
+                        col.append(card.append(body.append(title, p1, p2)));
+                        $("#forecastweek .row").append(col);
+
+                    }
+
+                }
+
+
 
 
 
