@@ -1,6 +1,6 @@
 
 $(document).ready(function () {
-    var history = [];
+
 
 
     function weatherApi(event) {
@@ -32,6 +32,13 @@ $(document).ready(function () {
                     $('#city').val('');
 
                     uvIndex(data.coord.lat, data.coord.lon);
+                    if (city && data) {
+                        localStorage.setItem(data, city);
+
+
+
+                    }
+
 
                 }
             });
@@ -39,12 +46,27 @@ $(document).ready(function () {
         } else {
             $('#invalid').html('Invalid city');
         }
+        for (i = 0; i < localStorage.length; i++) {
+
+            console.log(localStorage.getItem(data));
+
+            var li = output.innerhtml += $('#city');
+            $('#submitCity').append(li);
+
+
+
+
+
+
+        }
+
+
+
     };
 
-    function makeRow(text) {
-        var li = $("<li>").addClass("list-group-item list-group-item-action").text(text);
-        $("#searchDiv").append(li);
-    }
+
+
+
 
 
 
@@ -73,11 +95,16 @@ $(document).ready(function () {
                 }
                 else {
                     return $('#showUv').css({ color: 'red', background: 'blue' }).html('UV Index' + UVdata.value);
+
+
                 }
 
 
 
+
+
             }
+
         });
     }
     function weatherForecast(city) {
@@ -111,6 +138,8 @@ $(document).ready(function () {
                         col.append(card.append(body.append(title, p1, p2)));
                         $("#forecastWeek .row").append(col);
 
+
+
                     }
 
                 }
@@ -134,13 +163,7 @@ $(document).ready(function () {
 
 
 
-        // if (history.length > 0) {
-        //     weatherForecast(history[history.length - 1]);
-        // }
-        // for (var i = 0; i < history.length; i++) {
-        //     makeRow(history[i]);
-        // }
-        // console.log(city);
+
     }
 
 
