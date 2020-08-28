@@ -1,16 +1,18 @@
 
 $(document).ready(function () {
+    var history = [];
 
 
     function weatherApi(event) {
         event.preventDefault();
 
-        $("#searchDiv").on("click", weatherApi, function () {
-            cityWeather($(this).text());
-        });
+
+
+
 
 
         var city = $('#city').val();
+        // history.push(city)
         weatherForecast(city);
 
         if (city != '') {
@@ -22,6 +24,7 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (data) {
                     console.log(data);
+                    localStorage.setItem(city, JSON.stringify(data))
                     var weatherAnswers = show(data);
 
 
@@ -129,13 +132,14 @@ $(document).ready(function () {
 
         })
 
-        var history = JSON.parse(window.localStorage.getItem("history")) || [];
-        if (history.length > 0) {
-            weatherForecast(history[history.length - 1]);
-        }
-        for (var i = 0; i < history.length; i++) {
-            makeRow(history[i]);
-        }
+
+
+        // if (history.length > 0) {
+        //     weatherForecast(history[history.length - 1]);
+        // }
+        // for (var i = 0; i < history.length; i++) {
+        //     makeRow(history[i]);
+        // }
         // console.log(city);
     }
 
