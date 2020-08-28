@@ -5,6 +5,11 @@ $(document).ready(function () {
     function weatherApi(event) {
         event.preventDefault();
 
+        $("#searchDiv").on("click", weatherApi, function () {
+            cityWeather($(this).text());
+        });
+
+
         var city = $('#city').val();
         weatherForecast(city);
 
@@ -32,6 +37,11 @@ $(document).ready(function () {
             $('#invalid').html('Invalid city');
         }
     };
+
+    function makeRow(text) {
+        var li = $("<li>").addClass("list-group-item list-group-item-action").text(text);
+        $("#searchDiv").append(li);
+    }
 
 
 
@@ -74,25 +84,29 @@ $(document).ready(function () {
             dataType: 'json',
             success: function (forData) {
                 console.log('fordata1', forData);
+                console.log('fordata2', forData.list[1].dt_txt);
+                console.log('fordata2', forData.list[1].main.temp);
 
+                $('#forecastWeek').html("<h3><strong>5 Day Forecast:</strong></h3>").append('<div class="row"/>');
 
-                console.log('fordata2', forData);
-                $('#forecastweek').html("<h3><strong>5 Day Forecast:</strong></h3>").append('div class="row"');
                 // $('#forecastDay').html('Date:' + forData.list[1].dt_txt) +
                 // $('#forecast').html('Temp:' + forData.list[1].main.temp) +
                 // $('#forecastHum').html('Humidity:' + forData.list[1].main.humidity);
 
-                for (const i = 0; i < forData.list.length; i++) {
+                for (i = 0; i < forData.list.length; i++) {
                     if (forData.list[i].dt_txt.indexOf('15:00:00') !== -1) {
+                        console.log('fordata3', forData.list[i].dt_txt);
 
                         var col = $("<div>").addClass("col-2");
                         var card = $("<div>").addClass("card bg-primary text-white");
                         var body = $("<div>").addClass("card-body p-2");
-                        var title = $("<h3>").addClass("card-title").text(new Date(fordata.list[i].dt_txt).toLocalDateString());
-                        var p1 = $("<p>").addClass("card-text").text("Temperature: " + fordata.list[i].main.temp_max + " F");
-                        var p2 = $("<p>").addClass("card-text").text("Humidity: " + fordata.list[i].main.humidity + "%");
+                        var title = $("<h3>").addClass("card-title").text(forData.list[i].dt_txt).toLocalDateString;
+
+                        var p1 = $("<p>").addClass("card-text").text("Temperature: " + forData.list[i].main.temp_max + " F");
+                        var p2 = $("<p>").addClass("card-text").text("Humidity: " + forData.list[i].main.humidity + "%");
+                        col.empty();
                         col.append(card.append(body.append(title, p1, p2)));
-                        $("#forecastweek .row").append(col);
+                        $("#forecastWeek .row").append(col);
 
                     }
 
@@ -109,10 +123,19 @@ $(document).ready(function () {
 
 
 
+
             }
 
 
         })
+
+        var history = JSON.parse(window.localStorage.getItem("history")) || [];
+        if (history.length > 0) {
+            weatherForecast(history[history.length - 1]);
+        }
+        for (var i = 0; i < history.length; i++) {
+            makeRow(history[i]);
+        }
         // console.log(city);
     }
 
@@ -127,7 +150,7 @@ $(document).ready(function () {
 
 function show(data) {
 
-    return "<h2><em>Current Weather</em>: " + data.name + ", " + data.date + "</h2>" +
+    return "<h2><em>Current Weather</em>: " + data.name + "</h2>" +
         "<h3><strong>Temperature:</strong>: " + data.main.temp + "</h3>" +
         "<h3><strong>Humidity:</strong>: " + data.main.humidity + "%</h3>" +
         "<h3><strong>Wind Speed:</strong>: " + data.wind.speed + "MPH</h3>";
